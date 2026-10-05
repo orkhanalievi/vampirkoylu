@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="az"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vampir Köylü</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4efe8;--cd:#fff;--tx:#241a1a;--mu:#7a6a6a;--ac:#9b1c2e;--bd:#e0d6cc;--ok:#2f7d4f}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#140c10;--cd:#211318;--tx:#f3e9e9;--mu:#a08c90;--ac:#d6334a;--bd:#3a2229;--ok:#58c27f}}
+:root[data-theme="dark"]{--bg:#140c10;--cd:#211318;--tx:#f3e9e9;--mu:#a08c90;--ac:#d6334a;--bd:#3a2229;--ok:#58c27f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100%}
+#app{max-width:520px;margin:auto;padding:16px 16px 40px}
+h1{font:700 28px Georgia,serif;margin:8px 0}h2{font-size:17px;margin:0 0 8px}
+.mu{color:var(--mu)}.er{color:var(--ac);font-weight:600}
+.c{background:var(--cd);border:1px solid var(--bd);border-radius:16px;padding:14px;margin:12px 0}
+.ctr{text-align:center}
+button{font:inherit;cursor:pointer;border-radius:12px;border:1px solid var(--bd);background:var(--cd);color:var(--tx);padding:10px 14px;margin:4px 2px}
+.b{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:600;width:100%;padding:13px}
+.g{background:transparent}
+button:disabled{opacity:.4;cursor:not-allowed}
+input[type=text]{font:inherit;width:100%;box-sizing:border-box;padding:12px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);margin-bottom:8px;letter-spacing:2px;text-transform:uppercase}
+input.nm{letter-spacing:0;text-transform:none}
+.r{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd)}
+.r:last-child{border:0}.st b{display:inline-block;min-width:28px;text-align:center}
+input[type=checkbox]{width:22px;height:22px;accent-color:var(--ac)}
+.code{font:700 38px ui-monospace,monospace;letter-spacing:4px;color:var(--ac);margin:8px 0}
+.gr{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:6px;margin:12px 0}
+.sb{margin:0;padding:14px 0;font-weight:700}.sb.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.rc{height:360px;border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:22px;margin:14px 0;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none;cursor:pointer;background:linear-gradient(160deg,#5b0f1c,#1d0a10);color:#f3e9e9}
+.rc .f{display:none}.rc.on{background:var(--cd);color:var(--tx);border:2px solid var(--ac)}
+.rc.on .f{display:block}.rc.on .bk{display:none}
+.big{font-size:84px;line-height:1}
+.tabs{display:flex;gap:4px}.tabs button{flex:1;margin:0;padding:10px 2px;font-size:14px}.tabs .on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.chip{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)}
+.chip.d{opacity:.45;text-decoration:line-through}.chip span:nth-child(3){flex:1}
+.tm{font:700 64px ui-monospace,monospace;text-align:center;margin:8px 0}
+.win{background:var(--ok);color:#fff;border-radius:12px;padding:12px;text-align:center;font-weight:700;margin:10px 0}
+.bad{background:var(--ac)}
+.ts{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#000d;color:#fff;padding:10px 16px;border-radius:20px;z-index:9;max-width:90%;text-align:center}
+.thb{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:8px;width:38px;height:38px;border-radius:50%;padding:0;margin:0;z-index:8;opacity:.8}
+.lg{padding:7px 0;border-bottom:1px solid var(--bd);font-size:14px}.lg:last-child{border:0}
+details{margin:6px 0}summary{cursor:pointer;font-weight:600}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--ok);margin-right:8px}
+</style></head><body><div id="app"></div><button class="thb" id="th" onclick="thm()" aria-label="Tema">🌓</button>
+<script>
+const R={vampir:{n:'Vampir',e:'🧛',d:'Hər gecə bir nəfəri öldürür, gündüz isə köylü kimi davranır. Sayca digərlərinə bərabər olanda qalib gəlir.'},
+koylu:{n:'Köylü',e:'🧑‍🌾',d:'Xüsusi qabiliyyəti yoxdur. Gündüz müzakirə və səsvermə ilə vampirləri tapır.'},
+hekim:{n:'Həkim',e:'🩺',d:'Hər gecə bir nəfəri xilas edir (özünü də ola bilər). Eyni nəfəri ardıcıl iki gecə qoruya bilməz.'},
+detektiv:{n:'Detektiv',e:'🕵️',d:'Hər gecə bir nəfəri yoxlayır; aparıcı işarə ilə "vampirdir" və ya "deyil" cavabı verir.'},
+manyak:{n:'Manyak',e:'🔪',d:'Tək oynayır, hər gecə birini öldürür. Axıra qədər sağ qalan tək qalibdir.'},
+ovcu:{n:'Ovçu',e:'🏹',d:'Hansı yolla ölməsindən asılı olmayaraq, öləndə dərhal bir nəfəri özü ilə aparır.'}};
+const SP=['hekim','detektiv','manyak','ovcu'];
+const S={v:'home',mode:'',n:8,vc:2,vcAuto:true,f:3,code:'',c:null,seat:0,names:null,order:null,started:0,rms:'',miss:0,tab:'n',step:0,t:120,ti:null,vt:null,cf:0,pp:0,ps:'give',ri:null};
+let G=null,WL=null,RMP=null,RMR=null;
+const K={g(k){try{return localStorage.getItem(k)}catch(e){return null}},s(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const A=document.getElementById('app'),$=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pc=x=>{let n=0;while(x){n+=x&1;x>>=1}return n};
+const sug=n=>Math.max(1,Math.min(15,Math.floor(n/3.5)));
+const rnd=()=>{let s='';const ch='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';for(let i=0;i<8;i++)s+=ch[Math.floor(Math.random()*ch.length)];return s.slice(0,4)+'-'+s.slice(4)};
+const cn=t=>{t=(t||'').replace(/[^0-9a-z]/gi,'').toUpperCase();return t.length===8?t.slice(0,4)+'-'+t.slice(4):null};
+const rn=()=>'vk-'+S.code.replace('-','').toLowerCase();
+const PID=(()=>{let p=K.g('vpid');if(!p){p=Math.random().toString(36).slice(2,8);K.s('vpid',p)}return p})();
+const rng=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+function deal(c){const a=[];for(let i=0;i<c.v;i++)a.push('vampir');SP.forEach((k,i)=>{if(c.f>>i&1)a.push(k)});
+while(a.length<c.n)a.push('koylu');const r=rng(c.s);for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function finalCfg(m){let f=S.f,v=S.vcAuto?sug(m):S.vc;v=Math.max(1,Math.min(v,m-1));
+while(pc(f&15)+v>m){for(let b=3;b>=0;b--)if(f>>b&1){f&=~(1<<b);break}}
+return{n:m,v,f,s:Math.floor(Math.random()*16777216)}}
+const compText=c=>{const sp=SP.filter((k,i)=>c.f>>i&1).map(k=>R[k].n).join(', ');return `${c.n} nəfər: ${c.v} vampir${sp?', '+sp:''}, ${c.n-c.v-pc(c.f&15)} köylü`};
+function toast(t,ms){const d=document.createElement('div');d.className='ts';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),ms||2200)}
+const link=()=>location.href.split('#')[0]+'#'+S.code;
+const roleList=()=>Object.values(R).map(r=>`<div class=r style="align-items:flex-start"><span class=big style="font-size:28px">${r.e}</span><span style="flex:1;margin-left:10px"><b>${r.n}</b><br><span class=mu>${r.d}</span></span></div>`).join('');
+
+/* ---------- Otaq (real vaxt) ---------- */
+function getRM(){return RMP||(RMP=(async()=>{try{return(window.claude&&claude.use)?await claude.use('room'):null}catch(e){return null}})())}
+async function leaveRoom(){clearInterval(S.ri);S.ri=null;if(RMR){const r=RMR;RMR=null;try{await r.leave()}catch(e){}}}
+async function connect(){const rm=await getRM();if(!rm){S.rms='no';return null}
+if(RMR&&RMR.name===rn()){S.rms='ok';return RMR}
+try{await leaveRoom();const r=await rm.join(rn());RMR=r;r.onPeers(onPeers);r.on('start',onStart);S.rms='ok';return r}catch(e){S.rms='no';return null}}
+const players=()=>{if(!RMR)return[];const seen={},o=[];RMR.peers().forEach(p=>{const q=p.presence;if(q&&q.t==='p'&&typeof q.pid==='string'&&!seen[q.pid]){seen[q.pid]=1;o.push({pid:q.pid,name:String(q.name||'Oyunçu').slice(0,12),me:p.isMe})}});return o.slice(0,30)};
+function onPeers(ch){if(S.mode==='host'&&S.started&&ch.joined.length)emitStart();if(S.v==='lobby'||S.v==='wait')render()}
+function emitStart(){if(RMR&&S.c&&S.order)RMR.emit('start',{cfg:S.c,order:S.order,names:S.names}).catch(()=>{})}
+function onStart(m){if(m.isMe||S.mode!=='player')return;const d=m.data;if(!d||!d.cfg||!Array.isArray(d.order))return;
+const n=+d.cfg.n;if(!(n>=4&&n<=30))return;const i=d.order.indexOf(PID);
+if(i<0||i>=n){S.miss=1;if(S.v==='wait')render();return}
+if(S.c&&S.c.s===+d.cfg.s&&S.seat===i+1&&S.v==='card')return;
+const cfg={n,v:+d.cfg.v,f:+d.cfg.f,s:+d.cfg.s};S.c=cfg;S.seat=i+1;S.names=Array.isArray(d.names)?d.names.map(x=>String(x).slice(0,12)):null;S.miss=0;
+K.s('vr:'+S.code,JSON.stringify({cfg,seat:S.seat,names:S.names}));go('card');toast('🎲 Oyun başladı! Rolun hazırdır.')}
+
+/* ---------- Oyun vəziyyəti (aparıcı) ---------- */
+const newG=()=>({dead:[],log:[],rd:1,ph:'n',act:{},ls:null,pend:null,news:'',vr:'',rv:1});
+function loadG(){let g=null;try{g=JSON.parse(K.g('vg:'+S.code))}catch(e){}G=g&&Array.isArray(g.dead)?g:newG()}
+const saveG=()=>K.s('vg:'+S.code,JSON.stringify(G));
+const lg=t=>G.log.push(G.rd+'. '+t);
+const alv=a=>a.map((_,i)=>i).filter(i=>!G.dead.includes(i));
+const pn=i=>S.names&&S.names[i]?' '+esc(S.names[i]):'';
+const nm=(a,i)=>'№'+(i+1)+pn(i)+(G.rv?' ('+R[a[i]].e+' '+R[a[i]].n+')':'');
+function winner(a){const al=a.filter((r,i)=>!G.dead.includes(i)),v=al.filter(r=>r==='vampir').length,m=al.includes('manyak')?1:0;
+if(!al.length)return '🤷 Heç kim sağ qalmadı';
+if(!v&&!m)return '🏆 Köylülər qalib gəldi!';
+if(m&&al.length===1)return '🏆 Manyak qalib gəldi!';
+if(v&&v>=al.length-v)return '🏆 Vampirlər qalib gəldi!';return ''}
+function die(i,why,a){if(G.dead.includes(i))return;G.dead.push(i);lg('💀 №'+(i+1)+pn(i)+' ('+R[a[i]].n+') — '+why);if(a[i]==='ovcu'&&G.pend==null)G.pend=i}
+
+/* ---------- Ekranlar ---------- */
+function home(){const hc=K.g('vhc');
+return `<h1>🧛 Vampir Köylü</h1><p class=mu>Kartlar itir, cırılır, tanınır? Burada hər kəs öz telefonunda gizli rolunu çəkir.</p>
+<div class=c><h2>Otağa qoşul</h2><input type=text id=ni class=nm placeholder="Adın" maxlength=12 value="${esc(K.g('vname')||'')}"><input type=text id=ci placeholder="XXXX-XXXX" value="${esc(S.code)}" maxlength=9 autocapitalize=characters><button class=b onclick=join()>Qoşul</button></div>
+<div class=c><h2>Aparıcıyam</h2><p class=mu>Otaq yarat, kodu dostlara göndər. Hamı qoşulandan sonra oyunu sən başladırsan, rollar təsadüfi paylanır.</p><button class=b onclick=newHost()>Yeni oyun yarat</button></div>
+${hc?`<div class=c><h2>Davam et</h2><p class=mu>Aparıcı otağı ${esc(hc)}</p><button class=b onclick=resume()>Otağa qayıt</button></div>`:''}
+<div class=c><h2>Rolların izahı</h2>${roleList()}</div>
+<div class=c><h2>Oyun qaydaları</h2>
+<details><summary>Oyun necə gedir?</summary><p class=mu>Oyunçular otağa qoşulur, aparıcı oyunu başladır və hər kəsin telefonuna təsadüfi rol gəlir (basıb saxlayaraq görürsən). Aparıcı gecə və gündüz fazalarını idarə edir: gecə rollar səssiz oyanıb hərəkət edir, səhər nəticə elan olunur, gündüz isə müzakirə və səsvermə keçirilir.</p></details>
+<details><summary>Kim qalib gəlir?</summary><p class=mu>Bütün vampirlər çıxarılsa köylülər qalib gəlir. Vampirlərin sayı qalan digər oyunçuların sayına çatanda vampirlər qalib gəlir. Manyak varsa, axıra tək qalarsa qalib o olur.</p></details>
+<details><summary>Gecə sırası</summary><p class=mu>Vampirlər → Həkim → Detektiv → Manyak. Həkim seçdiyi nəfəri həm vampirdən, həm də manyakdan qoruyur.</p></details>
+<details><summary>Gizli və açıq səsvermə</summary><p class=mu>Gizli səsvermədə aparıcı telefonu əldən-ələ ötürür, hər oyunçu tək-tək gizli seçim edir. Açıq səsvermədə aparıcı səsləri özü sayır. Bərabərlik olarsa: heç kimi çıxarmamaq, birini seçib çıxarmaq və ya bərabər qalanlar arasında yenidən səsvermə mümkündür.</p></details>
+<details><summary>Ovçu</summary><p class=mu>Ovçu hansı yolla ölməsindən asılı olmayaraq (gecə, səsvermə) dərhal bir nəfəri özü ilə aparır.</p></details></div>`}
+
+function host(){const back=S.code&&S.mode==='host';
+return `<button class=g onclick="go('${back?'lobby':'home'}')">← Geri</button><h1>Oyun parametrləri</h1><div class=c>
+<div class=r><span>🧛 Vampir sayı</span><span class=st><button onclick="ch(-1)">−</button><b style="min-width:48px">${S.vcAuto?'avto':S.vc}</b><button onclick="ch(1)">+</button></span></div>
+${S.vcAuto?'':'<div class=ctr><button class=g onclick="S.vcAuto=true;render()">Avtomatik say</button></div>'}
+${SP.map((k,i)=>`<label class=r><span>${R[k].e} ${R[k].n}</span><input type=checkbox ${S.f>>i&1?'checked':''} onchange="tg(${i})"></label>`).join('')}
+<label class=r><span>🤝 Vampirlər bir-birini görsün</span><input type=checkbox ${S.f>>4&1?'checked':''} onchange="tg(4)"></label></div>
+<p class=mu>Oyunçu sayı otağa qoşulanların sayına görə müəyyən olunur. Vampir sayı "avto"dursa, oyunçu sayına uyğun seçilir. Yer çatmasa xüsusi rollar avtomatik azaldılır.</p>
+<button class=b onclick="${back?"go('lobby')":'mk()'}">${back?'Yadda saxla':'Otağı yarat'}</button>`}
+
+function lobby(){const ps=players(),n=ps.length,fc=n>=4?finalCfg(n):null,live=S.rms==='ok';
+const st=S.rms===''||S.rms==='wait'?'Bağlantı qurulur…':live?'':'⚠️ Real vaxt bağlantısı yoxdur (artefaktın link ilə açıq olması və ya giriş icazəsi lazımdır). Aşağıdakı "telefon ötürmə" rejimindən istifadə et.';
+return `<button class=g onclick="go('home')">← Çıx</button><h1>Otaq</h1><div class="c ctr"><div class=code>${esc(S.code)}</div>
+<p class=mu>Dostlar linki açıb adını yazsın və ya kodu daxil etsin.</p>
+<button class=b onclick=shr()>Linki göndər</button><button class=g onclick=cp()>Kodu kopyala</button></div>
+<div class=c><h2>👥 Qoşulanlar (${n})</h2>${st?`<p class=${live?'mu':'er'}>${st}</p>`:''}
+${n?ps.map(p=>`<div class=r><span><span class=dot></span>${esc(p.name)}</span></div>`).join(''):(live?'<p class=mu>Hələ heç kim qoşulmayıb.</p>':'')}
+<p class=mu style="margin-bottom:0">${fc?'Tərkib → '+compText(fc):'Başlamaq üçün ən azı 4 oyunçu lazımdır.'}</p></div>
+<button class=b ${(n<4||!live)?'disabled':''} onclick=startGame()>🎲 Oyunu başlat (rolları təsadüfi payla)</button>
+${S.started&&S.c&&S.order?`<button class=g style="width:100%" onclick=openN()>🎙️ Aparıcı panelinə qayıt</button>`:''}
+<button class=g style="width:100%" onclick="go('host')">⚙️ Rolları və parametrləri dəyiş</button>
+<div class=c><h2>📱 Telefon ötürmə rejimi</h2><p class=mu>Oyunçuların bağlanması mümkün deyilsə: aparıcı öz telefonunu əldən-ələ verir, hər kəs növbə ilə rolunu görür.</p>
+<div class=r><span>Oyunçu sayı</span><span class=st><button onclick="chn(-1)">−</button><b>${S.n}</b><button onclick="chn(1)">+</button></span></div>
+<button class=b onclick=startPass()>Telefon ötürmə ilə başlat</button></div>`}
+
+function wait(){const ps=players(),live=S.rms==='ok';
+return `<button class=g onclick="go('home')">← Çıx</button><h1>Gözləmə otağı</h1><div class="c ctr"><div class=code style="font-size:30px">${esc(S.code)}</div><div class=big style="font-size:56px">⏳</div>
+<p>Aparıcının oyunu başlatmasını gözlə. Rolun avtomatik və təsadüfi veriləcək.</p></div>
+${S.miss?'<p class=er>Oyun artıq başlayıb, amma sən siyahıda yoxsan. Aparıcıdan növbəti oyunu gözlə.</p>':''}
+<div class=c><h2>👥 Qoşulanlar (${ps.length})</h2>${live?'':'<p class=er>Bağlantı yoxdur.</p>'}${ps.map(p=>`<div class=r><span><span class=dot></span>${esc(p.name)}</span>${p.me?'<span class=mu>sən</span>':''}</div>`).join('')}</div>`}
+
+function cardBody(c,seat){const a=deal(c),r=a[seat-1],o=R[r];let tm='';
+if(r==='vampir'&&(c.f>>4&1)){const o2=a.map((x,i)=>x==='vampir'&&i+1!==seat?'№'+(i+1)+(S.names&&S.names[i]&&S.v==='card'?' '+esc(S.names[i]):''):'').filter(Boolean);tm=`<p><b>🤝 Komandan:</b> ${o2.length?o2.join(', '):'tək vampirsən'}</p>`}
+return `<div class=rc id=rc oncontextmenu="return false" onpointerdown="rv(1)" onpointerup="rv(0)" onpointerleave="rv(0)" onpointercancel="rv(0)">
+<div class=bk><div class=big>🌙</div><h2 style="margin-top:14px">Rolunu görmək üçün<br>basıb saxla</h2><p style="opacity:.7">Buraxanda gizlənir</p></div>
+<div class=f><div class=big>${o.e}</div><h1>${o.n}</h1><p>${o.d}</p>${tm}</div></div>
+<p class=mu style="text-align:center">Ətrafına baxan olmasın 👀</p>`}
+function card(){return `<button class=g onclick="go('home')">← Çıx</button><p class=mu>Oyunçu №${S.seat} · Otaq ${esc(S.code)}</p>${cardBody(S.c,S.seat)}`}
+
+function pass(){const i=S.pp,n=S.c.n;
+if(i>=n)return `<div class="c ctr"><div class=big>✅</div><h2>Hamı rolunu gördü</h2><button class=b onclick=openN()>🎙️ Aparıcı panelini aç</button></div>`;
+if(S.ps==='give')return `<div class="c ctr"><p class=mu>Oyunçu ${i+1}/${n}</p><div class=big>📱</div><h2 style="font-size:24px">Telefonu №${i+1} oyunçusuna ver</h2><button class=b onclick="S.ps='see';render()">Mən №${i+1}-əm</button></div>`;
+return `<p class=mu>Oyunçu №${i+1}/${n}</p>${cardBody(S.c,i+1)}<button class=b onclick="S.pp++;S.ps='give';render();scrollTo(0,0)">Gördüm, növbəti →</button>`}
+
+/* ---------- Gecə ---------- */
+function nightSteps(c){const s=[{t:'🌙 Şəhər yatır',x:'Hamı gözünü yumur və səssiz qalır.'},
+{t:'🧛 Vampirlər oyanır',x:'Gözlərini açıb səssiz işarə ilə qurbanı seçirlər, sonra yenidən yatırlar. Seçimi aşağıda qeyd et.',k:'v',r:'vampir'}];
+if(c.f&1)s.push({t:'🩺 Həkim oyanır',x:'Kimi xilas edəcəyini işarə ilə göstərir. Ardıcıl iki gecə eyni nəfər olmaz.',k:'h',r:'hekim'});
+if(c.f>>1&1)s.push({t:'🕵️ Detektiv oyanır',x:'Kimi yoxlayır? Cavab: baş barmaq yuxarı = vampir, aşağı = deyil.',k:'d',r:'detektiv'});
+if(c.f>>2&1)s.push({t:'🔪 Manyak oyanır',x:'Hədəfini işarə ilə göstərir.',k:'m',r:'manyak'});
+s.push({t:'☀️ Səhər',x:'Seçimləri yoxla və səhəri elan et.',k:'end'});return s}
+
+function nightTab(a){
+if(G.ph!=='n')return `<div class="c ctr"><p>Gecə ${G.rd} yekunlaşıb.</p><button class=b onclick="S.tab='d';render()">☀️ Gündüz tabına keç</button></div>`;
+const c=S.c,st=nightSteps(c),i=Math.min(S.step,st.length-1),s=st[i],last=i===st.length-1;let p='';
+if(s.k&&!last){
+const hi=s.r==='vampir'?a.findIndex((r,j)=>r==='vampir'&&!G.dead.includes(j)):a.indexOf(s.r);
+const okk=hi>=0&&!G.dead.includes(hi);
+if(!okk)p='<p class=mu>☠️ Bu rolun sahibi artıq ölüb. Yenə də onu oyatmış kimi bir az gözlə ki, kimsə anlamasın.</p>';
+else{const sel=G.act[s.k],ex=(s.k==='d'||s.k==='m')?[hi+1]:[],dis=(s.k==='h'&&G.ls)?[G.ls]:[];
+const ss=alv(a).map(j=>j+1).filter(n=>!ex.includes(n));
+p=`<p class=mu>Seçilən oyunçu:</p><div class=gr>${ss.map(n=>`<button class="sb ${sel===n?'on':''}" ${dis.includes(n)?'disabled':''} onclick="pa('${s.k}',${n})">${n}</button>`).join('')}</div>
+<button class=g ${sel===0?'style="background:var(--ac);color:#fff"':''} onclick="pa('${s.k}',0)">Heç kim</button>`;
+if(s.k==='h'&&G.ls)p+=`<p class=mu>Dünən №${G.ls} qorunub, bu gecə eyni nəfəri seçmək olmaz.</p>`;
+if(s.k==='d'&&sel)p+=`<div class="win ${a[sel-1]==='vampir'?'bad':''}">№${sel}${pn(sel-1)}: ${a[sel-1]==='vampir'?'🧛 VAMPİRDİR → baş barmaq yuxarı 👍':'🙂 Vampir deyil → baş barmaq aşağı 👎'}</div>`}}
+if(last){const f=k=>G.act[k]===undefined?'—':(G.act[k]?'№'+G.act[k]+pn(G.act[k]-1):'heç kim');
+p=`<div style="text-align:left"><div class=r><span>🧛 Vampirlərin hədəfi</span><b>${f('v')}</b></div>`+
+(c.f&1?`<div class=r><span>🩺 Həkim qoruyur</span><b>${f('h')}</b></div>`:'')+
+(c.f>>1&1?`<div class=r><span>🕵️ Detektiv yoxlayır</span><b>${f('d')}</b></div>`:'')+
+(c.f>>2&1?`<div class=r><span>🔪 Manyakın hədəfi</span><b>${f('m')}</b></div>`:'')+`</div>`;
+const need=a.some((r,j)=>r==='vampir'&&!G.dead.includes(j))&&G.act.v===undefined;
+p+=`<button class=b ${need?'disabled':''} onclick=resolveNight()>☀️ Səhəri elan et</button>${need?'<p class=er>Vampirlərin seçimi qeyd olunmayıb.</p>':''}`}
+return `<div class="c ctr"><p class=mu>Gecə ${G.rd} · addım ${i+1}/${st.length}</p><h2 style="font-size:24px">${s.t}</h2><p>${s.x}</p>${p}
+<div><button onclick="S.step=Math.max(0,${i}-1);render()">←</button>${last?'':`<button class=b style="width:auto;padding:10px 28px" onclick="S.step=${i+1};render()">Növbəti →</button>`}</div></div>`}
+
+function pa(k,n){G.act[k]=G.act[k]===n?undefined:n;saveG();render()}
+
+function resolveNight(){const a=deal(S.c),x=G.act,dl=[];
+const sv=x.h?x.h-1:-1,vt=x.v?x.v-1:-1,mt=x.m?x.m-1:-1;
+if(vt>=0&&vt!==sv)dl.push([vt,'vampirlərin hədəfi']);
+if(mt>=0&&mt!==sv&&mt!==vt)dl.push([mt,'manyakın hədəfi']);
+const p=['Vampir hədəfi: '+(vt>=0?'№'+(vt+1):'—')];
+if(mt>=0)p.push('manyak: №'+(mt+1));
+if(sv>=0)p.push('həkim: №'+(sv+1)+((sv===vt||sv===mt)?' (xilas etdi)':''));
+if(x.d)p.push('detektiv №'+x.d+' → '+(a[x.d-1]==='vampir'?'vampir':'vampir deyil'));
+lg('🌙 '+p.join(', '));
+G.ls=x.h||null;
+dl.forEach(([i,w])=>die(i,w,a));
+G.news=dl.length?'Bu gecə öldü: '+dl.map(([i])=>nm(a,i)).join(', '):'Bu gecə heç kim ölmədi 🎉';
+G.ph='d';G.act={};G.vr='';S.tab='d';S.vt=null;saveG();render();scrollTo(0,0)}
+
+/* ---------- Ovçu ---------- */
+function hunterCard(a){const h=G.pend;return `<div class="c ctr"><div class=big>🏹</div><h2>Ovçu №${h+1}${pn(h)} öldü!</h2><p>Dərhal kimi özü ilə aparır?</p>
+<div class=gr>${alv(a).map(j=>`<button class=sb onclick="shoot(${j+1})">${j+1}</button>`).join('')}</div>
+<button class=g onclick="shoot(0)">Heç kimi aparmır</button></div>`}
+function shoot(t){const a=deal(S.c),h=G.pend,k=G.ph==='e'?'vr':'news';G.pend=null;
+if(t){die(t-1,'ovçu №'+(h+1)+' apardı',a);G[k]+=' · 🏹 Ovçu apardı: '+nm(a,t-1)}else lg('🏹 Ovçu heç kimi aparmadı');
+saveG();render()}
+
+/* ---------- Gündüz və səsvermə ---------- */
+function startVote(mode,cands){const a=deal(S.c),al=alv(a);S.vt={mode,cands:cands||al,voters:al,vi:0,sel:-1,ballots:[],counts:{},stage:mode==='secret'?'pass':'open'};render();scrollTo(0,0)}
+function oc(i,d){S.vt.counts[i]=Math.max(0,(S.vt.counts[i]||0)+d);render()}
+function openDone(){S.vt.stage='res';render()}
+function secGo(){S.vt.stage='pick';S.vt.sel=-1;render()}
+function secPick(i){S.vt.sel=i;render()}
+function secOk(){const v=S.vt;v.ballots.push(v.sel);v.sel=-1;v.vi++;
+if(v.vi>=v.voters.length){v.counts={};v.ballots.forEach(b=>{if(b>=0)v.counts[b]=(v.counts[b]||0)+1});v.stage='res'}else v.stage='pass';render();scrollTo(0,0)}
+function cancelVote(){S.vt=null;render()}
+const vline=v=>v.cands.filter(c=>v.counts[c]).map(c=>'№'+(c+1)+':'+v.counts[c]).join(' ')||'səs yoxdur';
+function elimV(i){const a=deal(S.c),v=S.vt;lg('🗳️ Səsvermə ('+(v.mode==='secret'?'gizli':'açıq')+'): '+vline(v));
+die(i,'səsvermə ilə çıxarıldı',a);G.ph='e';G.vr='Səsvermə nəticəsi: '+nm(a,i)+' çıxarıldı';S.vt=null;saveG();render();scrollTo(0,0)}
+function noElim(){const v=S.vt;lg('🗳️ Səsvermə: '+(v?vline(v)+' → ':'')+'heç kim çıxarılmadı');G.ph='e';G.vr='Heç kim çıxarılmadı';S.vt=null;saveG();render()}
+function revote(){const v=S.vt,mx=Math.max(...v.cands.map(i=>v.counts[i]||0));startVote(v.mode,v.cands.filter(i=>(v.counts[i]||0)===mx))}
+function nextNight(){G.rd++;G.ph='n';G.act={};G.news='';G.vr='';S.step=0;S.tab='n';S.vt=null;saveG();render();scrollTo(0,0)}
+
+function voteSecret(a){const v=S.vt,me=v.voters[v.vi],tag=`<p class=mu>Oyunçu ${v.vi+1}/${v.voters.length}</p>`;
+if(v.stage==='pass')return `<div class="c ctr">${tag}<div class=big>📱</div><h2 style="font-size:24px">Telefonu №${me+1}${pn(me)} oyunçusuna ver</h2><p class=mu>Digərləri ekrana baxmasın.</p>
+<button class=b onclick=secGo()>Mən №${me+1}-əm, davam</button></div><button class=g onclick=cancelVote()>Səsverməni ləğv et</button>`;
+const cs=v.cands.filter(i=>i!==me);
+return `<div class="c ctr">${tag}<h2 style="font-size:22px">№${me+1}, kimi çıxarmaq istəyirsən?</h2>
+<div class=gr>${cs.map(i=>`<button class="sb ${v.sel===i?'on':''}" onclick="secPick(${i})">${i+1}</button>`).join('')}</div>
+${S.names?`<p class=mu style="font-size:13px">${cs.map(i=>(i+1)+' – '+esc(S.names[i]||'')).join(' · ')}</p>`:''}
+<button class=g ${v.sel===-2?'style="background:var(--ac);color:#fff"':''} onclick="secPick(-2)">Bitərəf qalıram</button>
+<button class=b style="margin-top:8px" ${v.sel===-1?'disabled':''} onclick=secOk()>Təsdiqlə və telefonu ötür</button></div><button class=g onclick=cancelVote()>Səsverməni ləğv et</button>`}
+
+function dayTab(a){
+if(G.ph==='n')return `<div class="c ctr"><p>Gecə hələ yekunlaşmayıb.</p><button class=b onclick="S.tab='n';render()">🌙 Gecə tabına keç</button></div>`;
+let h=`<div class=c><h2>☀️ Gün ${G.rd}</h2><p>${G.news}</p>${G.vr?`<p><b>${G.vr}</b></p>`:''}</div>`;
+if(G.ph==='e')return h+`<button class=b onclick=nextNight()>🌙 Yeni gecə →</button>`;
+const v=S.vt;
+if(!v){h+=`<div class=c><h2>💬 Müzakirə</h2><div class=tm id=tt>${fmt(S.t)}</div><div class=ctr>
+${[60,120,180].map(x=>`<button onclick="tset(${x})">${x/60} dəq</button>`).join('')}<button class=b style="width:auto" onclick=tgo()>${S.ti?'⏸ Dayandır':'▶ Başla'}</button></div></div>
+<div class=c><h2>🗳️ Səsvermə</h2><p class=mu>${alv(a).length} oyunçu sağdır. Üsulu seç:</p>
+<button class=b onclick="startVote('secret')">📱 Gizli (telefon əldən-ələ)</button>
+<button class=b style="margin-top:6px" onclick="startVote('open')">✋ Açıq (səsləri özüm sayıram)</button>
+<button class=g style="width:100%" onclick="noElim()">Heç kimi çıxarmadan keç</button></div>`;return h}
+if(v.stage==='open')return h+`<div class=c><h2>✋ Açıq səsvermə</h2><p class=mu>Hər namizədin səs sayını qeyd et.</p>
+${v.cands.map(i=>`<div class=r><span>№${i+1}${pn(i)}</span><span class=st><button onclick="oc(${i},-1)">−</button><b>${v.counts[i]||0}</b><button onclick="oc(${i},1)">+</button></span></div>`).join('')}</div>
+<button class=b onclick=openDone()>Nəticəni hesabla</button><button class=g onclick=cancelVote()>Ləğv et</button>`;
+const cs=v.cands,mx=Math.max(0,...cs.map(i=>v.counts[i]||0)),tied=mx?cs.filter(i=>(v.counts[i]||0)===mx):[];
+const sorted=[...cs].sort((x,y)=>(v.counts[y]||0)-(v.counts[x]||0));
+h+=`<div class=c><h2>📊 Nəticə</h2>${sorted.map(i=>`<div class=r><span>№${i+1}${pn(i)}</span><b>${v.counts[i]||0} səs</b></div>`).join('')}</div>`;
+if(!mx)h+=`<div class="win bad">Heç kim səs almadı</div><button class=b onclick=noElim()>Heç kimi çıxarmadan davam et</button><button class=g onclick="startVote(S.vt.mode)">🔁 Yenidən səsvermə</button>`;
+else if(tied.length===1)h+=`<button class=b onclick="elimV(${tied[0]})">💀 №${tied[0]+1}${pn(tied[0])} çıxarılsın</button><button class=g style="width:100%" onclick=noElim()>Heç kimi çıxarma</button>`;
+else h+=`<div class="win bad">⚖️ Bərabərlik: ${tied.map(i=>'№'+(i+1)).join(', ')} (hər biri ${mx} səs)</div>
+<button class=b onclick=revote()>🔁 Bərabər qalanlar arasında yenidən səsvermə</button>
+${tied.map(i=>`<button style="width:100%" onclick="elimV(${i})">💀 №${i+1}${pn(i)} çıxarılsın (aparıcı qərarı)</button>`).join('')}
+<button class=g style="width:100%" onclick=noElim()>Heç kimi çıxarma</button>`;
+return h+`<button class=g onclick=cancelVote()>Səsverməni ləğv et</button>`}
+
+/* ---------- Cədvəl və jurnal ---------- */
+function tableTab(a,w){const al=alv(a),v=al.filter(i=>a[i]==='vampir').length;
+return (w?`<div class=win>${w}</div>`:'')+`<p class=mu>Sağ: ${al.length} · Vampir: ${v}</p><div class=c>${a.map((r,i)=>`<div class="chip ${G.dead.includes(i)?'d':''}"><b>№${i+1}</b><span>${R[r].e}</span><span>${R[r].n}${pn(i)}</span><button onclick="tgl(${i})">${G.dead.includes(i)?'♻️':'💀'}</button></div>`).join('')}</div>
+<div class=c><label class=r><span>Ölənin rolu elan olunsun</span><input type=checkbox ${G.rv?'checked':''} onchange="G.rv=this.checked?1:0;saveG()"></label>
+<p class=mu style="margin:8px 0 0">💀/♻️ düymələri səhvləri əl ilə düzəltmək üçündür.</p></div>
+${S.cf?`<div class="c ctr"><p class=er>Bütün oyun gedişatı silinəcək. Əminsən?</p><button class=b onclick=resetG()>Bəli, sıfırla</button><button class=g onclick="S.cf=0;render()">Xeyr</button></div>`:`<button class=g style="width:100%" onclick="S.cf=1;render()">♻️ Oyunu sıfırla (eyni rollar)</button>`}
+${S.mode==='host'?`<button class=g style="width:100%" onclick="go('lobby')">👥 Lobi / yeni oyun (rolları yenidən payla)</button>`:''}`}
+function tgl(i){const a=deal(S.c),j=G.dead.indexOf(i);
+if(j<0)die(i,'əl ilə',a);else{G.dead.splice(j,1);if(G.pend===i)G.pend=null;lg('♻️ №'+(i+1)+' geri qaytarıldı (əl ilə)')}saveG();render()}
+function resetG(){G=newG();S.cf=0;S.step=0;S.tab='n';S.vt=null;saveG();render()}
+function logTab(){return `<div class=c>${G.log.length?[...G.log].reverse().map(t=>`<div class=lg>${t}</div>`).join(''):'<p class=mu>Hələ qeyd yoxdur.</p>'}</div>`}
+
+function narr(){const a=deal(S.c),w=G.pend==null?winner(a):'';let tab=S.tab;if(w&&(tab==='n'||tab==='d'))tab='t';
+const tb=(k,t)=>`<button class="${tab==k?'on':''}" onclick="S.tab='${k}';render()">${t}</button>`;
+const sec=S.vt&&(S.vt.stage==='pass'||S.vt.stage==='pick'),hd=`<button class=g onclick="go('home')">← Çıx</button><h1>🎙️ Aparıcı</h1><p class=mu>Otaq ${esc(S.code)} · Gecə/Gün ${G.rd} · yalnız aparıcı baxsın!</p>`;
+if(sec)return hd+voteSecret(a);
+if(G.pend!=null)return hd+hunterCard(a);
+let b='';
+if(tab==='n')b=nightTab(a);else if(tab==='d')b=dayTab(a);else if(tab==='t')b=tableTab(a,w);else b=logTab();
+return hd+`<div class=tabs>${tb('n','🌙 Gecə')}${tb('d','☀️ Gündüz')}${tb('t','📋 Cədvəl')}${tb('l','📜 Jurnal')}</div>${b}`}
+
+/* ---------- Əsas ---------- */
+const V={home,host,lobby,wait,card,pass,narr};
+function render(){A.innerHTML=V[S.v]()}
+function go(v){if(v!=='narr'){clearInterval(S.ti);S.ti=null}if(v==='home')leaveRoom();S.v=v;render();scrollTo(0,0);if(v!=='home'&&v!=='host')wl()}
+function ch(d){if(S.vcAuto){S.vcAuto=false;S.vc=sug(8)}S.vc=Math.min(15,Math.max(1,S.vc+d));render()}
+function chn(d){S.n=Math.min(30,Math.max(4,S.n+d));render()}
+function tg(i){S.f^=1<<i;render()}
+function newHost(){S.code='';S.mode='host';S.started=0;S.c=null;S.order=null;S.names=null;go('host')}
+function mk(){S.code=rnd();S.mode='host';S.started=0;K.s('vhc',S.code);S.rms='wait';connect().then(()=>{if(S.v==='lobby')render()});go('lobby')}
+function resume(){const c=K.g('vhc');if(!c)return;S.code=c;S.mode='host';S.started=0;S.c=null;S.order=null;S.names=null;
+try{const o=JSON.parse(K.g('vh:'+c));if(o&&o.cfg&&o.order){S.c=o.cfg;S.order=o.order;S.names=o.names;S.started=1}}catch(e){}
+S.rms='wait';connect().then(()=>{if(S.started&&S.mode==='host'){clearInterval(S.ri);S.ri=setInterval(emitStart,6000)}if(S.v==='lobby')render()});go('lobby')}
+function startGame(){const ps=players();if(ps.length<4||!RMR)return toast('Ən azı 4 oyunçu lazımdır');
+const o=ps.map(p=>p);for(let i=o.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[o[i],o[j]]=[o[j],o[i]]}
+S.c=finalCfg(o.length);S.order=o.map(p=>p.pid);S.names=o.map(p=>p.name);S.started=1;
+K.s('vh:'+S.code,JSON.stringify({cfg:S.c,order:S.order,names:S.names}));K.s('vg:'+S.code,'');
+emitStart();clearInterval(S.ri);S.ri=setInterval(emitStart,6000);openN()}
+function startPass(){S.c=finalCfg(S.n);S.names=null;S.order=null;S.started=0;K.s('vg:'+S.code,'');S.pp=0;S.ps='give';go('pass')}
+async function join(){const code=cn($('#ci').value),nmv=($('#ni').value||'').trim().slice(0,12)||'Oyunçu';
+if(!code)return toast('Kod səhvdir');K.s('vname',nmv);S.code=code;S.mode='player';S.miss=0;
+const st=K.g('vr:'+code);
+if(st){try{const o=JSON.parse(st);S.c=o.cfg;S.seat=o.seat;S.names=o.names;go('card');const r=await connect();if(r)r.presence({t:'p',pid:PID,name:nmv}).catch(()=>{});return}catch(e){}}
+S.c=null;S.rms='wait';toast('Qoşulur…');const r=await connect();
+if(!r)return toast('Bağlantı alınmadı. Bu rejim üçün artefaktı giriş icazəsi olan hesabla açmaq lazımdır. Aparıcı "telefon ötürmə" rejimindən istifadə edə bilər.',6000);
+await r.presence({t:'p',pid:PID,name:nmv}).catch(()=>{});go('wait')}
+function openN(){loadG();S.tab=G.ph==='n'?'n':'d';S.step=0;S.vt=null;S.cf=0;go('narr')}
+function rv(on){const e=$('#rc');if(!e)return;e.classList.toggle('on',!!on);if(on&&navigator.vibrate)navigator.vibrate(30)}
+function cp(){try{navigator.clipboard.writeText(link()).then(()=>toast('Kopyalandı'),()=>toast(S.code))}catch(e){toast(S.code)}}
+function shr(){if(navigator.share)navigator.share({title:'Vampir Köylü',text:'Otaq kodu: '+S.code,url:link()}).catch(()=>{});else cp()}
+const fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+function beep(){try{const x=new AudioContext();[0,.35,.7].forEach(d=>{const o=x.createOscillator();o.frequency.value=660;o.connect(x.destination);o.start(x.currentTime+d);o.stop(x.currentTime+d+.2)})}catch(e){}if(navigator.vibrate)navigator.vibrate([200,100,200,100,400])}
+function tset(x){clearInterval(S.ti);S.ti=null;S.t=x;render()}
+function tgo(){if(S.ti){clearInterval(S.ti);S.ti=null}else{if(S.t<=0)S.t=120;S.ti=setInterval(()=>{S.t--;const e=$('#tt');if(e)e.textContent=fmt(S.t);if(S.t<=0){clearInterval(S.ti);S.ti=null;beep();render()}},1000)}render()}
+async function wl(){try{if(navigator.wakeLock&&!WL){WL=await navigator.wakeLock.request('screen');WL.addEventListener('release',()=>{WL=null})}}catch(e){}}
+function thm(){const cur=document.documentElement.dataset.theme||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'),n=cur==='dark'?'light':'dark';document.documentElement.dataset.theme=n;K.s('vtheme',n)}
+{const t=K.g('vtheme');if(t==='dark'||t==='light')document.documentElement.dataset.theme=t}
+document.addEventListener('visibilitychange',()=>{rv(0);if(document.visibilityState==='visible'&&S.v!=='home'&&S.v!=='host')wl()});
+function boot(){const h=cn(location.hash.slice(1));
+if(h){S.code=h;const st=K.g('vr:'+h);
+if(st){try{const o=JSON.parse(st);S.c=o.cfg;S.seat=o.seat;S.names=o.names;S.mode='player';
+connect().then(r=>{if(r)r.presence({t:'p',pid:PID,name:K.g('vname')||'Oyunçu'}).catch(()=>{})});return go('card')}catch(e){}}}
+render()}
+addEventListener('hashchange',boot);boot();
+</script></body></html>
